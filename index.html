@@ -20,34 +20,50 @@
             gap: 20px;
         }
         .sidebar {
-            width: 350px;
+            width: 380px; /* Diperlebar sedikit agar muat banyak opsi */
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            height: fit-content;
+            height: 90vh; /* Tinggi menyesuaikan layar */
+            overflow-y: auto; /* Bisa di-scroll */
         }
+        
+        /* Custom Scrollbar untuk Sidebar */
+        .sidebar::-webkit-scrollbar { width: 8px; }
+        .sidebar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .sidebar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-y: auto;
+            height: 90vh;
         }
         .form-group {
             margin-bottom: 15px;
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
         }
         .form-group label {
             display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #334155;
         }
         .form-group input[type="text"], .form-group select {
             width: 100%;
             padding: 8px;
-            border: 1px solid #ccc;
+            border: 1px solid #cbd5e1;
             border-radius: 4px;
             box-sizing: border-box;
+            font-family: inherit;
         }
         .form-group input[type="file"] {
             font-size: 12px;
@@ -55,15 +71,16 @@
         }
         .slider {
             width: 100%;
+            margin-top: 5px;
         }
         .font-size-val {
-            color: #0284c7;
+            color: #2563eb;
             font-weight: bold;
         }
         
         /* Kertas Laporan */
         .report-paper {
-            width: 800px; /* Ukuran standar landscape */
+            width: 800px;
             background: white;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             position: relative;
@@ -74,7 +91,8 @@
         .header {
             position: relative;
             width: 100%;
-            height: 160px; /* Tinggi proporsional */
+            height: 160px;
+            /* Default background merah putih standar */
             background: linear-gradient(to bottom, #d32f2f 50%, #ffffff 50%);
             background-size: cover;
             background-position: center;
@@ -91,30 +109,27 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 60%;
+            width: 70%; /* Diperlebar agar teks panjang tidak menabrak logo */
         }
 
-        /* Gaya Teks Kuning Border Hitam (Standar Militer) */
+        /* Gaya Teks Kuning Border Hitam (Lebih Rapi & Tajam) */
         .text-military {
             color: #FFD700;
             font-weight: 900;
             font-family: Arial, sans-serif;
             text-transform: uppercase;
             letter-spacing: 1px;
-            /* Border luar (stroke) hitam tebal & bayangan */
-            text-shadow: 
-                -2px -2px 0 #000,  
-                 2px -2px 0 #000,
-                -2px  2px 0 #000,
-                 2px  2px 0 #000,
-                 0px  3px 5px rgba(0,0,0,0.8);
+            /* Kombinasi webkit-stroke & bayangan tebal solid untuk outline yang tajam */
+            -webkit-text-stroke: 1.5px black;
+            text-shadow: 3px 3px 0 #000, 
+                         4px 4px 5px rgba(0,0,0,0.7);
         }
         
         /* Baris 1 Wajib 1 Baris */
         #previewJudul1 {
             white-space: nowrap; 
             font-size: 32px; /* Default */
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
         #previewJudul2 {
             font-size: 26px; /* Default */
@@ -123,19 +138,23 @@
         /* Logo Position */
         .logo-kiri {
             position: absolute;
-            left: 25px;
+            left: 20px;
             top: 50%;
             transform: translateY(-50%);
             height: 110px;
             z-index: 10;
+            max-width: 110px;
+            object-fit: contain;
         }
         .logo-kanan {
             position: absolute;
-            right: 25px;
+            right: 20px;
             top: 50%;
             transform: translateY(-50%);
             height: 110px;
             z-index: 10;
+            max-width: 110px;
+            object-fit: contain;
         }
 
         /* Tanggal di Kanan Bawah Header */
@@ -149,19 +168,25 @@
             font-size: 14px; /* Default */
             text-transform: none;
             letter-spacing: 0px;
+            /* Stroke untuk tanggal agak ditipiskan supaya terbaca jelas */
+            -webkit-text-stroke: 1px black;
+            text-shadow: 2px 2px 0 #000;
         }
 
-        /* Grid Foto */
+        /* Grid Foto Dinamis */
         .grid-container {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* 2 Kolom */
             gap: 15px;
             padding: 20px;
+            /* Default 2 kolom untuk 4 foto */
+            grid-template-columns: 1fr 1fr; 
         }
+        
         .photo-box {
             background-color: #334155;
             width: 100%;
-            aspect-ratio: 4/3;
+            /* Aspek rasio lanskap standar */
+            aspect-ratio: 4/3; 
             background-size: cover;
             background-position: center;
             border: 3px solid #fff;
@@ -171,6 +196,25 @@
             align-items: center;
             color: #94a3b8;
             font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Container Upload Dinamis */
+        #dynamicUploadContainer {
+            border: 1px dashed #cbd5e1;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+        .dynamic-photo-input {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .dynamic-photo-input:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
         }
 
         .btn-download {
@@ -184,6 +228,7 @@
             cursor: pointer;
             margin-bottom: 20px;
             box-shadow: 0 4px 6px rgba(22, 163, 74, 0.3);
+            width: 800px;
         }
         .btn-download:hover { background: #15803d; }
     </style>
@@ -192,41 +237,38 @@
 
     <!-- Panel Pengaturan -->
     <div class="sidebar">
-        <h2 style="margin-top: 0; font-size: 18px; color: var(--primary);">⚙️ Pengaturan Laporan</h2>
+        <h2 style="margin-top: 0; font-size: 18px; color: var(--primary); text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">⚙️ Pengaturan Laporan</h2>
+        
+        <!-- TEKS & KOP -->
+        <h3 style="font-size: 14px; color: #64748b; margin-top: 20px;">1. TEKS & KOP LAPORAN</h3>
         
         <div class="form-group">
             <label>Judul Baris 1</label>
             <input type="text" id="inputJudul1" value="DOKUMENTASI PEMBERSIHAN">
-        </div>
-        <div class="form-group">
-            <label>Ukuran Font Judul 1: <span id="valSize1" class="font-size-val">32</span>px</label>
+            <label style="margin-top: 10px;">Ukuran Font: <span id="valSize1" class="font-size-val">32</span>px</label>
             <input type="range" id="sizeJudul1" class="slider" min="16" max="60" value="32">
         </div>
 
         <div class="form-group">
             <label>Judul Baris 2</label>
             <input type="text" id="inputJudul2" value="SEKTOR SLOGDAM XII/TPR">
-        </div>
-        <div class="form-group">
-            <label>Ukuran Font Judul 2: <span id="valSize2" class="font-size-val">26</span>px</label>
+            <label style="margin-top: 10px;">Ukuran Font: <span id="valSize2" class="font-size-val">26</span>px</label>
             <input type="range" id="sizeJudul2" class="slider" min="14" max="50" value="26">
         </div>
 
         <div class="form-group">
-            <label>Tanggal & Hari</label>
+            <label>Keterangan Tanggal & Hari</label>
             <input type="text" id="inputTanggal" value="Sabtu, 7 November 2026">
-        </div>
-        <div class="form-group">
-            <label>Ukuran Font Tanggal: <span id="valSizeTgl" class="font-size-val">14</span>px</label>
+            <label style="margin-top: 10px;">Ukuran Font: <span id="valSizeTgl" class="font-size-val">14</span>px</label>
             <input type="range" id="sizeTanggal" class="slider" min="10" max="30" value="14">
         </div>
 
-        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;">
-
+        <!-- GAMBAR KOP -->
+        <h3 style="font-size: 14px; color: #64748b; margin-top: 25px;">2. BACKGROUND & LOGO</h3>
         <div class="form-group">
             <label>Background Kop (Opsional)</label>
             <input type="file" id="inputBg" accept="image/*">
-            <small style="color: gray;">(Upload gambar Satin Merah Putih di sini)</small>
+            <small style="color: gray; display:block; margin-top:4px;">(Upload Satin Merah Putih di sini)</small>
         </div>
         <div class="form-group">
             <label>Logo Instansi Kiri</label>
@@ -237,29 +279,28 @@
             <input type="file" id="inputLogoKanan" accept="image/*">
         </div>
 
-        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;">
+        <!-- GRID FOTO -->
+        <h3 style="font-size: 14px; color: #64748b; margin-top: 25px;">3. LAYOUT & JUMLAH FOTO</h3>
+        <div class="form-group">
+            <label>Pilih Jumlah Foto / Grid</label>
+            <select id="gridSelector" onchange="generateGrid()">
+                <option value="1">1 Foto (Penuh)</option>
+                <option value="2">2 Foto (Berdampingan)</option>
+                <option value="3">3 Foto (1 Atas, 2 Bawah)</option>
+                <option value="4" selected>4 Foto (Grid 2x2 - Standar)</option>
+                <option value="6">6 Foto (Grid 2 Kolom x 3 Baris)</option>
+                <option value="8">8 Foto (Grid 2 Kolom x 4 Baris)</option>
+            </select>
+        </div>
 
-        <div class="form-group">
-            <label>Upload Foto 1 (Kiri Atas)</label>
-            <input type="file" id="inputFoto1" accept="image/*">
-        </div>
-        <div class="form-group">
-            <label>Upload Foto 2 (Kanan Atas)</label>
-            <input type="file" id="inputFoto2" accept="image/*">
-        </div>
-        <div class="form-group">
-            <label>Upload Foto 3 (Kiri Bawah)</label>
-            <input type="file" id="inputFoto3" accept="image/*">
-        </div>
-        <div class="form-group">
-            <label>Upload Foto 4 (Kanan Bawah)</label>
-            <input type="file" id="inputFoto4" accept="image/*">
+        <div id="dynamicUploadContainer">
+            <!-- Input file foto akan di-generate otomatis di sini oleh JavaScript -->
         </div>
     </div>
 
     <!-- Area Pratinjau Kertas -->
     <div class="main-content">
-        <button class="btn-download" onclick="downloadReport()">📥 Unduh Laporan (JPG)</button>
+        <button class="btn-download" onclick="downloadReport()">📥 Unduh Laporan (JPG Resolusi Tinggi)</button>
         
         <div class="report-paper" id="reportArea">
             <!-- Header (Merah Putih) -->
@@ -279,12 +320,9 @@
                 </div>
             </div>
 
-            <!-- Grid Foto -->
-            <div class="grid-container">
-                <div class="photo-box" id="boxFoto1">Foto 1</div>
-                <div class="photo-box" id="boxFoto2">Foto 2</div>
-                <div class="photo-box" id="boxFoto3">Foto 3</div>
-                <div class="photo-box" id="boxFoto4">Foto 4</div>
+            <!-- Grid Foto Pratinjau -->
+            <div class="grid-container" id="gridContainerPreview">
+                <!-- Kotak foto akan di-generate otomatis di sini -->
             </div>
         </div>
     </div>
@@ -309,8 +347,8 @@
             document.getElementById('valSizeTgl').innerText = e.target.value;
         });
 
-        // Image Upload Handlers
-        function handleImageUpload(inputId, targetId, isBackground = false) {
+        // Image Upload Handler untuk Header/Kop
+        function handleHeaderUpload(inputId, targetId, isBackground = false) {
             document.getElementById(inputId).addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -318,17 +356,12 @@
                     reader.onload = function(event) {
                         const targetElement = document.getElementById(targetId);
                         if (isBackground) {
-                            targetElement.style.backgroundImage = `url(${event.target.result})`;
-                            // Hapus gradien merah putih bawaan jika gambar dimasukkan
                             targetElement.style.background = `url(${event.target.result})`;
                             targetElement.style.backgroundSize = 'cover';
                             targetElement.style.backgroundPosition = 'center';
-                        } else if (targetElement.tagName === 'IMG') {
+                        } else {
                             targetElement.src = event.target.result;
                             targetElement.style.display = 'block';
-                        } else {
-                            targetElement.style.backgroundImage = `url(${event.target.result})`;
-                            targetElement.innerText = ''; // Hilangkan teks placeholder
                         }
                     }
                     reader.readAsDataURL(file);
@@ -336,21 +369,88 @@
             });
         }
 
-        // Setup Event Listeners for Images
-        handleImageUpload('inputBg', 'headerContainer', true);
-        handleImageUpload('inputLogoKiri', 'logoKiriPreview');
-        handleImageUpload('inputLogoKanan', 'logoKananPreview');
-        handleImageUpload('inputFoto1', 'boxFoto1');
-        handleImageUpload('inputFoto2', 'boxFoto2');
-        handleImageUpload('inputFoto3', 'boxFoto3');
-        handleImageUpload('inputFoto4', 'boxFoto4');
+        handleHeaderUpload('inputBg', 'headerContainer', true);
+        handleHeaderUpload('inputLogoKiri', 'logoKiriPreview');
+        handleHeaderUpload('inputLogoKanan', 'logoKananPreview');
+
+        // Fungsi Dinamis Generate Grid & Tombol Upload
+        function generateGrid() {
+            const count = parseInt(document.getElementById('gridSelector').value);
+            const uploadContainer = document.getElementById('dynamicUploadContainer');
+            const gridPreview = document.getElementById('gridContainerPreview');
+            
+            uploadContainer.innerHTML = '';
+            gridPreview.innerHTML = '';
+
+            // Atur kolom CSS grid berdasarkan jumlah foto
+            if (count === 1) {
+                gridPreview.style.gridTemplateColumns = '1fr';
+            } else if (count === 2 || count === 4 || count === 6 || count === 8) {
+                gridPreview.style.gridTemplateColumns = '1fr 1fr'; // 2 Kolom
+            } else if (count === 3) {
+                // Khusus 3 foto: Foto 1 besar di atas (2 kolom), Foto 2 & 3 di bawah
+                gridPreview.style.gridTemplateColumns = '1fr 1fr'; 
+            }
+
+            for (let i = 1; i <= count; i++) {
+                // 1. Buat elemen input file di sidebar
+                const uploadDiv = document.createElement('div');
+                uploadDiv.className = 'dynamic-photo-input form-group';
+                uploadDiv.style.background = 'transparent';
+                uploadDiv.style.border = 'none';
+                uploadDiv.style.padding = '0';
+                
+                const label = document.createElement('label');
+                label.innerText = `Ganti Foto #${i}`;
+                
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.id = `inputFoto${i}`;
+                
+                uploadDiv.appendChild(label);
+                uploadDiv.appendChild(input);
+                uploadContainer.appendChild(uploadDiv);
+
+                // 2. Buat elemen kotak foto di pratinjau kertas
+                const photoBox = document.createElement('div');
+                photoBox.className = 'photo-box';
+                photoBox.id = `boxFoto${i}`;
+                photoBox.innerText = `Foto Kegiatan ${i}`;
+                
+                // Aturan khusus grid ganjil (misal 3 foto)
+                if (count === 3 && i === 1) {
+                    photoBox.style.gridColumn = '1 / span 2'; // Menempati 2 kolom
+                    photoBox.style.aspectRatio = '21/9'; // Lebih lebar
+                }
+
+                gridPreview.appendChild(photoBox);
+
+                // 3. Pasang Event Listener agar saat diupload, foto langsung muncul
+                input.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            const targetBox = document.getElementById(`boxFoto${i}`);
+                            targetBox.style.backgroundImage = `url(${event.target.result})`;
+                            targetBox.innerText = ''; // Hilangkan teks "Foto Kegiatan"
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        }
+
+        // Panggil pertama kali saat halaman dimuat (Default 4 Foto)
+        generateGrid();
 
         // Download Function
         function downloadReport() {
             const reportArea = document.getElementById('reportArea');
             html2canvas(reportArea, { scale: 2 }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = 'Laporan-Dokumentasi.jpg';
+                link.download = 'Dokumentasi-Slogdam-Grid.jpg';
                 link.href = canvas.toDataURL('image/jpeg', 0.9);
                 link.click();
             });
