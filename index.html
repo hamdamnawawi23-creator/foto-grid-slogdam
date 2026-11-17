@@ -152,6 +152,8 @@
             z-index: 10;
             max-width: 110px;
             object-fit: contain;
+            /* Filter opsional untuk menghilangkan background hitam */
+            /* mix-blend-mode diatur via JS */
         }
         .logo-kanan {
             position: absolute;
@@ -195,7 +197,6 @@
             aspect-ratio: 4/3; 
             background-size: cover;
             background-position: center;
-            /* Border warna hitam pekat sesuai permintaan */
             border: 4px solid #000000; 
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             display: flex;
@@ -244,11 +245,11 @@
         /* TAMPILAN RESPONSIF UNTUK HP / MOBILE */
         @media (max-width: 850px) {
             body {
-                flex-direction: column; /* Menyusun dari atas ke bawah */
+                flex-direction: column; 
                 padding: 10px;
             }
             .sidebar {
-                width: 100%; /* Panel pengaturan layar penuh */
+                width: 100%; 
                 height: auto; 
                 max-height: none;
                 overflow-y: visible;
@@ -257,10 +258,9 @@
             .main-content {
                 width: 100%;
                 height: auto;
-                overflow-x: auto; /* Mengaktifkan geser (swipe) kiri-kanan khusus untuk kertas laporan */
-                align-items: flex-start; /* Meratakan laporan ke pinggir saat di hp */
+                overflow-x: auto; 
+                align-items: flex-start; 
             }
-            /* Menambahkan instruksi geser di HP */
             .main-content::before {
                 content: "Geser ke kanan untuk melihat pratinjau penuh ➡️";
                 display: block;
@@ -325,13 +325,23 @@
             <input type="file" id="inputBg" accept="image/*">
             <small style="color: gray; display:block; margin-top:4px;">(Upload Satin Merah Putih di sini)</small>
         </div>
+        
         <div class="form-group">
             <label>Logo Instansi Kiri</label>
             <input type="file" id="inputLogoKiri" accept="image/*">
+            <div style="margin-top:5px; font-size:11px; display:flex; align-items:center;">
+                <input type="checkbox" id="fixBgHitamKiri" style="margin-right:5px; width:auto;"> 
+                <label for="fixBgHitamKiri" style="display:inline; margin:0; font-weight:normal;">Hapus Layar Hitam (Jika Logo Rusak)</label>
+            </div>
         </div>
+        
         <div class="form-group">
             <label>Logo Instansi Kanan (Opsional)</label>
             <input type="file" id="inputLogoKanan" accept="image/*">
+            <div style="margin-top:5px; font-size:11px; display:flex; align-items:center;">
+                <input type="checkbox" id="fixBgHitamKanan" style="margin-right:5px; width:auto;"> 
+                <label for="fixBgHitamKanan" style="display:inline; margin:0; font-weight:normal;">Hapus Layar Hitam (Jika Logo Rusak)</label>
+            </div>
         </div>
 
         <h3 style="font-size: 14px; color: #64748b; margin-top: 25px;">3. LAYOUT & JUMLAH FOTO</h3>
@@ -410,6 +420,16 @@
         document.getElementById('strokeTanggal').addEventListener('input', e => {
             document.getElementById('previewTanggal').style.webkitTextStroke = e.target.value + 'px black';
             document.getElementById('valStrokeTgl').innerText = e.target.value;
+        });
+
+        // Checkbox Hapus Layar Hitam (Screen Mode)
+        document.getElementById('fixBgHitamKiri').addEventListener('change', e => {
+            const mode = e.target.checked ? 'screen' : 'normal';
+            document.getElementById('logoKiriPreview').style.mixBlendMode = mode;
+        });
+        document.getElementById('fixBgHitamKanan').addEventListener('change', e => {
+            const mode = e.target.checked ? 'screen' : 'normal';
+            document.getElementById('logoKananPreview').style.mixBlendMode = mode;
         });
 
         function handleHeaderUpload(inputId, targetId, isBackground = false) {
