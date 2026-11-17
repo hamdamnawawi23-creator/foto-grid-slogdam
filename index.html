@@ -120,15 +120,24 @@
             width: 70%;
         }
 
-        /* Teks Judul - SHADOW DIHILANGKAN, MURNI STROKE HITAM */
+        /* Teks Judul - Menggunakan Shadow 8 Arah (Menghindari Bug Garis di HP) */
         .text-military {
             color: #FFD700;
             font-weight: 900;
             font-family: Arial, sans-serif;
             text-transform: uppercase;
             letter-spacing: 1px;
-            -webkit-text-stroke: 1.5px black;
-            text-shadow: none; /* Dihapus total agar bersih */
+            /* Webkit-stroke DIHAPUS, diganti dengan shadow pekat */
+            -webkit-text-stroke: 0px; 
+            text-shadow: 
+                -2px -2px 0 #000,
+                 2px -2px 0 #000,
+                -2px  2px 0 #000,
+                 2px  2px 0 #000,
+                -2px  0px 0 #000,
+                 2px  0px 0 #000,
+                 0px  2px 0 #000,
+                 0px -2px 0 #000;
             white-space: pre-wrap; 
             line-height: 1.2; 
         }
@@ -170,12 +179,22 @@
             bottom: 5px;
             z-index: 10;
         }
+        
+        /* Tanggal (Shadow yang lebih tipis) */
         #previewTanggal {
             font-size: 14px; 
             text-transform: none;
             letter-spacing: 0px;
-            -webkit-text-stroke: 1px black;
-            text-shadow: none; /* Dihapus total agar bersih */
+            -webkit-text-stroke: 0px;
+            text-shadow: 
+                -1px -1px 0 #000,
+                 1px -1px 0 #000,
+                -1px  1px 0 #000,
+                 1px  1px 0 #000,
+                -1px  0px 0 #000,
+                 1px  0px 0 #000,
+                 0px  1px 0 #000,
+                 0px -1px 0 #000;
         }
 
         /* Grid Foto */
@@ -294,9 +313,6 @@
             <textarea id="inputJudul1">DOKUMENTASI KEGIATAN PEMBERSIHAN</textarea>
             <label style="margin-top: 10px;">Ukuran Font: <span id="valSize1" class="val-display">25</span>px</label>
             <input type="range" id="sizeJudul1" class="slider" min="16" max="60" value="25">
-            
-            <label style="margin-top: 10px;">Tebal Garis Tepi (Stroke): <span id="valStroke1" class="val-display">1.5</span>px</label>
-            <input type="range" id="strokeJudul1" class="slider" min="0" max="4" step="0.1" value="1.5">
         </div>
 
         <div class="form-group">
@@ -311,9 +327,10 @@
             <input type="text" id="inputTanggal" value="Sabtu, 7 November 2026">
             <label style="margin-top: 10px;">Ukuran Font: <span id="valSizeTgl" class="val-display">14</span>px</label>
             <input type="range" id="sizeTanggal" class="slider" min="10" max="30" value="14">
-            
-            <label style="margin-top: 10px;">Tebal Garis Tepi (Stroke): <span id="valStrokeTgl" class="val-display">1</span>px</label>
-            <input type="range" id="strokeTanggal" class="slider" min="0" max="3" step="0.1" value="1">
+        </div>
+        
+        <div style="font-size: 11px; color: #64748b; margin-top: -5px; margin-bottom: 15px;">
+            *Garis tepi (stroke) hitam sekarang distandarkan permanen untuk mencegah bug tampilan di HP.
         </div>
 
         <h3 style="font-size: 14px; color: #64748b; margin-top: 25px;">2. BACKGROUND & LOGO</h3>
@@ -397,18 +414,6 @@
         document.getElementById('sizeTanggal').addEventListener('input', e => {
             document.getElementById('previewTanggal').style.fontSize = e.target.value + 'px';
             document.getElementById('valSizeTgl').innerText = e.target.value;
-        });
-
-        document.getElementById('strokeJudul1').addEventListener('input', e => {
-            const strokeVal = e.target.value + 'px black';
-            document.getElementById('previewJudul1').style.webkitTextStroke = strokeVal;
-            document.getElementById('previewJudul2').style.webkitTextStroke = strokeVal;
-            document.getElementById('valStroke1').innerText = e.target.value;
-        });
-        
-        document.getElementById('strokeTanggal').addEventListener('input', e => {
-            document.getElementById('previewTanggal').style.webkitTextStroke = e.target.value + 'px black';
-            document.getElementById('valStrokeTgl').innerText = e.target.value;
         });
 
         function handleHeaderUpload(inputId, targetId, isBackground = false) {
