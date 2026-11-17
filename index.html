@@ -72,7 +72,7 @@
             width: 100%;
             margin-top: 5px;
         }
-        .font-size-val {
+        .val-display {
             color: #2563eb;
             font-weight: bold;
         }
@@ -84,7 +84,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             position: relative;
             padding-bottom: 20px;
-            box-sizing: border-box; /* PERBAIKAN: Memastikan padding tidak menambah lebar total */
+            box-sizing: border-box; 
         }
         
         /* Header Kop */
@@ -169,14 +169,14 @@
             text-shadow: 2px 2px 0 #000;
         }
 
-        /* Grid Foto PERBAIKAN BALANCE */
+        /* Grid Foto */
         .grid-container {
             display: grid;
             gap: 15px;
-            padding: 20px; /* Jarak padding sama di semua sisi (atas, bawah, kiri, kanan) */
+            padding: 20px;
             grid-template-columns: 1fr 1fr; 
             width: 100%;
-            box-sizing: border-box; /* Memaksa kotak grid mengikuti ukuran lebar kertas tanpa bocor */
+            box-sizing: border-box; 
         }
         
         .photo-box {
@@ -185,7 +185,6 @@
             aspect-ratio: 4/3; 
             background-size: cover;
             background-position: center;
-            /* Menggunakan outline alih-alih border agar kotak tidak bertambah lebar */
             outline: 3px solid #fff;
             outline-offset: -3px; 
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -237,27 +236,44 @@
     <div class="sidebar">
         <h2 style="margin-top: 0; font-size: 18px; color: var(--primary); text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">⚙️ Pengaturan Laporan</h2>
         
-        <h3 style="font-size: 14px; color: #64748b; margin-top: 20px;">1. TEKS & KOP LAPORAN</h3>
+        <h3 style="font-size: 14px; color: #64748b; margin-top: 20px;">1. PENGATURAN TEKS KOP</h3>
         
+        <div class="form-group">
+            <label>Pilih Jenis Font (Untuk Semua Teks)</label>
+            <select id="fontFamilySelector">
+                <option value="Arial, sans-serif" selected>Arial (Standar Militer)</option>
+                <option value="'Impact', sans-serif">Impact (Tebal & Padat)</option>
+                <option value="'Times New Roman', serif">Times New Roman (Formal)</option>
+                <option value="'Tahoma', sans-serif">Tahoma (Jelas & Modern)</option>
+                <option value="'Courier New', monospace">Courier New (Mesin Tik)</option>
+            </select>
+        </div>
+
         <div class="form-group">
             <label>Judul Baris 1</label>
             <input type="text" id="inputJudul1" value="DOKUMENTASI PEMBERSIHAN">
-            <label style="margin-top: 10px;">Ukuran Font: <span id="valSize1" class="font-size-val">32</span>px</label>
+            <label style="margin-top: 10px;">Ukuran Font: <span id="valSize1" class="val-display">32</span>px</label>
             <input type="range" id="sizeJudul1" class="slider" min="16" max="60" value="32">
+            
+            <label style="margin-top: 10px;">Tebal Garis Tepi (Stroke): <span id="valStroke1" class="val-display">1.5</span>px</label>
+            <input type="range" id="strokeJudul1" class="slider" min="0" max="4" step="0.1" value="1.5">
         </div>
 
         <div class="form-group">
             <label>Judul Baris 2</label>
             <input type="text" id="inputJudul2" value="SEKTOR SLOGDAM XII/TPR">
-            <label style="margin-top: 10px;">Ukuran Font: <span id="valSize2" class="font-size-val">26</span>px</label>
+            <label style="margin-top: 10px;">Ukuran Font: <span id="valSize2" class="val-display">26</span>px</label>
             <input type="range" id="sizeJudul2" class="slider" min="14" max="50" value="26">
         </div>
 
         <div class="form-group">
             <label>Keterangan Tanggal & Hari</label>
             <input type="text" id="inputTanggal" value="Sabtu, 7 November 2026">
-            <label style="margin-top: 10px;">Ukuran Font: <span id="valSizeTgl" class="font-size-val">14</span>px</label>
+            <label style="margin-top: 10px;">Ukuran Font: <span id="valSizeTgl" class="val-display">14</span>px</label>
             <input type="range" id="sizeTanggal" class="slider" min="10" max="30" value="14">
+            
+            <label style="margin-top: 10px;">Tebal Garis Tepi (Stroke): <span id="valStrokeTgl" class="val-display">1</span>px</label>
+            <input type="range" id="strokeTanggal" class="slider" min="0" max="3" step="0.1" value="1">
         </div>
 
         <h3 style="font-size: 14px; color: #64748b; margin-top: 25px;">2. BACKGROUND & LOGO</h3>
@@ -317,10 +333,20 @@
     </div>
 
     <script>
+        // Real-time Text Update
         document.getElementById('inputJudul1').addEventListener('input', e => document.getElementById('previewJudul1').innerText = e.target.value);
         document.getElementById('inputJudul2').addEventListener('input', e => document.getElementById('previewJudul2').innerText = e.target.value);
         document.getElementById('inputTanggal').addEventListener('input', e => document.getElementById('previewTanggal').innerText = e.target.value);
 
+        // Font Family Adjustments
+        document.getElementById('fontFamilySelector').addEventListener('change', e => {
+            const selectedFont = e.target.value;
+            document.getElementById('previewJudul1').style.fontFamily = selectedFont;
+            document.getElementById('previewJudul2').style.fontFamily = selectedFont;
+            document.getElementById('previewTanggal').style.fontFamily = selectedFont;
+        });
+
+        // Font Size Adjustments
         document.getElementById('sizeJudul1').addEventListener('input', e => {
             document.getElementById('previewJudul1').style.fontSize = e.target.value + 'px';
             document.getElementById('valSize1').innerText = e.target.value;
@@ -332,6 +358,19 @@
         document.getElementById('sizeTanggal').addEventListener('input', e => {
             document.getElementById('previewTanggal').style.fontSize = e.target.value + 'px';
             document.getElementById('valSizeTgl').innerText = e.target.value;
+        });
+
+        // Stroke Width (Garis Tepi) Adjustments
+        document.getElementById('strokeJudul1').addEventListener('input', e => {
+            const strokeVal = e.target.value + 'px black';
+            document.getElementById('previewJudul1').style.webkitTextStroke = strokeVal;
+            document.getElementById('previewJudul2').style.webkitTextStroke = strokeVal; // Judul 1 & 2 disamakan strokenya
+            document.getElementById('valStroke1').innerText = e.target.value;
+        });
+        
+        document.getElementById('strokeTanggal').addEventListener('input', e => {
+            document.getElementById('previewTanggal').style.webkitTextStroke = e.target.value + 'px black';
+            document.getElementById('valStrokeTgl').innerText = e.target.value;
         });
 
         function handleHeaderUpload(inputId, targetId, isBackground = false) {
