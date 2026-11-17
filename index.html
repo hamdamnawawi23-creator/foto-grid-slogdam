@@ -3,364 +3,357 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Laporan Dokumentasi Foto</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- html2canvas untuk unduh laporan -->
+    <title>Generator Laporan Dokumentasi - Slogdam</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- FontAwesome untuk ikon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #cbd5e1;
+            --bg-color: #f1f5f9;
+        }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
         }
-        /* Custom styling untuk laporan kertas A4 landscape/portrait aspect ratio */
-        .report-paper {
+        .sidebar {
+            width: 350px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .form-group input[type="text"], .form-group select {
             width: 100%;
-            max-width: 800px;
-            background: #ffffff;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            position: relative;
-            margin: 0 auto;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
-        /* Style teks kuning dengan garis luar (stroke) hitam tebal dan drop shadow tajam */
-        .title-outline {
-            color: #FFD700;
-            -webkit-text-stroke: 1.2px #111;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.6), 0 0 10px rgba(0,0,0,0.2);
-            font-family: 'Arial Black', Impact, sans-serif;
-            line-height: 1.2;
+        .form-group input[type="file"] {
+            font-size: 12px;
+            width: 100%;
         }
-        .date-outline {
-            color: #FFD700;
-            -webkit-text-stroke: 1px #111;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
-            font-family: 'Arial Black', Impact, sans-serif;
+        .slider {
+            width: 100%;
+        }
+        .font-size-val {
+            color: #0284c7;
+            font-weight: bold;
         }
         
-        /* Latar belakang bendera default merah putih (bisa ditimpa gambar) */
-        .bg-flag {
+        /* Kertas Laporan */
+        .report-paper {
+            width: 800px; /* Ukuran standar landscape */
+            background: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             position: relative;
-            background: linear-gradient(to bottom, #dc2626 50%, #ffffff 50%); /* Merah putih standar */
+            padding-bottom: 20px;
+        }
+        
+        /* Header Kop */
+        .header {
+            position: relative;
+            width: 100%;
+            height: 160px; /* Tinggi proporsional */
+            background: linear-gradient(to bottom, #d32f2f 50%, #ffffff 50%);
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
-            z-index: 1;
-            box-shadow: inset 0 -1px 3px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 3px solid #f8fafc;
         }
+        
+        .header-title-container {
+            text-align: center;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60%;
+        }
+
+        /* Gaya Teks Kuning Border Hitam (Standar Militer) */
+        .text-military {
+            color: #FFD700;
+            font-weight: 900;
+            font-family: Arial, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            /* Border luar (stroke) hitam tebal & bayangan */
+            text-shadow: 
+                -2px -2px 0 #000,  
+                 2px -2px 0 #000,
+                -2px  2px 0 #000,
+                 2px  2px 0 #000,
+                 0px  3px 5px rgba(0,0,0,0.8);
+        }
+        
+        /* Baris 1 Wajib 1 Baris */
+        #previewJudul1 {
+            white-space: nowrap; 
+            font-size: 32px; /* Default */
+            margin-bottom: 5px;
+        }
+        #previewJudul2 {
+            font-size: 26px; /* Default */
+        }
+
+        /* Logo Position */
+        .logo-kiri {
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 110px;
+            z-index: 10;
+        }
+        .logo-kanan {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 110px;
+            z-index: 10;
+        }
+
+        /* Tanggal di Kanan Bawah Header */
+        .date-container {
+            position: absolute;
+            right: 25px;
+            bottom: 5px;
+            z-index: 10;
+        }
+        #previewTanggal {
+            font-size: 14px; /* Default */
+            text-transform: none;
+            letter-spacing: 0px;
+        }
+
+        /* Grid Foto */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 Kolom */
+            gap: 15px;
+            padding: 20px;
+        }
+        .photo-box {
+            background-color: #334155;
+            width: 100%;
+            aspect-ratio: 4/3;
+            background-size: cover;
+            background-position: center;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #94a3b8;
+            font-weight: bold;
+        }
+
+        .btn-download {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(22, 163, 74, 0.3);
+        }
+        .btn-download:hover { background: #15803d; }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
+<body>
 
-    <!-- Header Navbar -->
-    <header class="bg-slate-900 text-white shadow-md py-4 px-6 flex justify-between items-center">
-        <div class="flex items-center space-x-3">
-            <div class="bg-red-600 text-white p-2 rounded-lg font-bold">
-                <i class="fa-solid fa-camera-retro"></i>
+    <!-- Panel Pengaturan -->
+    <div class="sidebar">
+        <h2 style="margin-top: 0; font-size: 18px; color: var(--primary);">⚙️ Pengaturan Laporan</h2>
+        
+        <div class="form-group">
+            <label>Judul Baris 1</label>
+            <input type="text" id="inputJudul1" value="DOKUMENTASI PEMBERSIHAN">
+        </div>
+        <div class="form-group">
+            <label>Ukuran Font Judul 1: <span id="valSize1" class="font-size-val">32</span>px</label>
+            <input type="range" id="sizeJudul1" class="slider" min="16" max="60" value="32">
+        </div>
+
+        <div class="form-group">
+            <label>Judul Baris 2</label>
+            <input type="text" id="inputJudul2" value="SEKTOR SLOGDAM XII/TPR">
+        </div>
+        <div class="form-group">
+            <label>Ukuran Font Judul 2: <span id="valSize2" class="font-size-val">26</span>px</label>
+            <input type="range" id="sizeJudul2" class="slider" min="14" max="50" value="26">
+        </div>
+
+        <div class="form-group">
+            <label>Tanggal & Hari</label>
+            <input type="text" id="inputTanggal" value="Sabtu, 7 November 2026">
+        </div>
+        <div class="form-group">
+            <label>Ukuran Font Tanggal: <span id="valSizeTgl" class="font-size-val">14</span>px</label>
+            <input type="range" id="sizeTanggal" class="slider" min="10" max="30" value="14">
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;">
+
+        <div class="form-group">
+            <label>Background Kop (Opsional)</label>
+            <input type="file" id="inputBg" accept="image/*">
+            <small style="color: gray;">(Upload gambar Satin Merah Putih di sini)</small>
+        </div>
+        <div class="form-group">
+            <label>Logo Instansi Kiri</label>
+            <input type="file" id="inputLogoKiri" accept="image/*">
+        </div>
+        <div class="form-group">
+            <label>Logo Instansi Kanan (Opsional)</label>
+            <input type="file" id="inputLogoKanan" accept="image/*">
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;">
+
+        <div class="form-group">
+            <label>Upload Foto 1 (Kiri Atas)</label>
+            <input type="file" id="inputFoto1" accept="image/*">
+        </div>
+        <div class="form-group">
+            <label>Upload Foto 2 (Kanan Atas)</label>
+            <input type="file" id="inputFoto2" accept="image/*">
+        </div>
+        <div class="form-group">
+            <label>Upload Foto 3 (Kiri Bawah)</label>
+            <input type="file" id="inputFoto3" accept="image/*">
+        </div>
+        <div class="form-group">
+            <label>Upload Foto 4 (Kanan Bawah)</label>
+            <input type="file" id="inputFoto4" accept="image/*">
+        </div>
+    </div>
+
+    <!-- Area Pratinjau Kertas -->
+    <div class="main-content">
+        <button class="btn-download" onclick="downloadReport()">📥 Unduh Laporan (JPG)</button>
+        
+        <div class="report-paper" id="reportArea">
+            <!-- Header (Merah Putih) -->
+            <div class="header" id="headerContainer">
+                <img id="logoKiriPreview" class="logo-kiri" style="display: none;">
+                
+                <div class="header-title-container">
+                    <div id="previewJudul1" class="text-military">DOKUMENTASI PEMBERSIHAN</div>
+                    <div id="previewJudul2" class="text-military">SEKTOR SLOGDAM XII/TPR</div>
+                </div>
+
+                <img id="logoKananPreview" class="logo-kanan" style="display: none;">
+                
+                <!-- Tanggal -->
+                <div class="date-container">
+                    <div id="previewTanggal" class="text-military">Sabtu, 7 November 2026</div>
+                </div>
             </div>
-            <div>
-                <h1 class="text-lg font-bold">Generator Laporan Dokumentasi</h1>
-                <p class="text-xs text-slate-400">Buat laporan grid foto resmi dengan mudah & cepat</p>
+
+            <!-- Grid Foto -->
+            <div class="grid-container">
+                <div class="photo-box" id="boxFoto1">Foto 1</div>
+                <div class="photo-box" id="boxFoto2">Foto 2</div>
+                <div class="photo-box" id="boxFoto3">Foto 3</div>
+                <div class="photo-box" id="boxFoto4">Foto 4</div>
             </div>
         </div>
-        <button onclick="downloadReport()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition flex items-center space-x-2 shadow">
-            <i class="fa-solid fa-download"></i>
-            <span>Unduh Laporan (JPG)</span>
-        </button>
-    </header>
-
-    <!-- Main Container -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- Panel Kontrol (Kiri) -->
-        <section class="lg:col-span-5 bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-5 overflow-y-auto max-h-[calc(100vh-130px)]">
-            <div class="border-b pb-3 flex justify-between items-center">
-                <h2 class="font-bold text-slate-700 flex items-center space-x-2">
-                    <i class="fa-solid fa-sliders text-indigo-600"></i>
-                    <span>Pengaturan Laporan</span>
-                </h2>
-                <button onclick="resetForm()" class="text-xs text-red-500 hover:underline">Reset</button>
-            </div>
-
-            <!-- Bagian Kop Surat -->
-            <div class="space-y-3">
-                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">1. Teks & Kop Laporan</h3>
-                
-                <div>
-                    <label class="block text-xs font-medium text-slate-600 mb-1">Judul Baris 1</label>
-                    <input type="text" id="inputTitle1" value="DOKUMENTASI PEMBERSIHAN" oninput="updateReport()" class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-slate-600 mb-1">Judul Baris 2</label>
-                    <input type="text" id="inputTitle2" value="SEKTOR SLOGDAM XII/TPR" oninput="updateReport()" class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-slate-600 mb-1">Keterangan Tanggal & Hari</label>
-                    <input type="text" id="inputDate" value="Sabtu, 7 November 2026" oninput="updateReport()" class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-slate-600 mb-1">Logo Instansi Kiri</label>
-                    <input type="file" id="inputLogo1" accept="image/*" onchange="handleLogoUpload(event, 1)" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-slate-600 mb-1">Logo Instansi Kanan (Opsional)</label>
-                    <input type="file" id="inputLogo2" accept="image/*" onchange="handleLogoUpload(event, 2)" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-slate-600 mb-1">Background Kop (Opsional)</label>
-                    <input type="file" id="inputBg" accept="image/*" onchange="handleBgUpload(event)" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
-                </div>
-            </div>
-
-            <!-- Bagian Grid Foto -->
-            <div class="space-y-3 pt-2 border-t">
-                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">2. Layout & Jumlah Foto</h3>
-                
-                <div>
-                    <label class="block text-xs font-medium text-slate-600 mb-1">Pilih Jumlah Foto / Grid</label>
-                    <select id="selectGridCount" onchange="changeGridCount()" class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
-                        <option value="2">2 Foto (1x2 / 2x1)</option>
-                        <option value="4" selected>4 Foto (Grid 2x2 - Seperti Contoh)</option>
-                        <option value="6">6 Foto (Grid 2x3)</option>
-                    </select>
-                </div>
-
-                <div id="imageUploadControls" class="space-y-2 mt-2">
-                    <!-- Dynamic upload items inserted via JS -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Panel Pratinjau Lembar Laporan (Kanan) -->
-        <section class="lg:col-span-7 flex flex-col items-center bg-slate-200/70 p-4 rounded-2xl border border-slate-300 overflow-y-auto">
-            <div class="text-xs text-slate-500 mb-2 font-medium">Pratinjau Hasil Dokumen:</div>
-            
-            <!-- Dokumen / Kertas Pelaporan -->
-            <div id="reportContainer" class="report-paper bg-white flex flex-col">
-                
-                <!-- Header Laporan -->
-                <div id="reportHeader" class="w-full bg-flag h-[160px] md:h-[200px] flex items-center justify-center relative overflow-hidden">
-                    <!-- Logo Kiri -->
-                    <img id="previewLogo1" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Lambang_Kodam_XII_Tanjungpura.png/300px-Lambang_Kodam_XII_Tanjungpura.png" alt="Logo Kiri" class="absolute left-2 md:left-6 max-w-[80px] md:max-w-[120px] max-h-[80px] md:max-h-[120px] object-contain drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)] z-20">
-                    
-                    <!-- Judul Teks (Tengah) -->
-                    <div class="relative z-20 flex flex-col justify-center items-center text-center px-24 md:px-40 w-full">
-                        <h2 id="previewTitle1" class="title-outline text-[1.25rem] md:text-[1.8rem] font-black uppercase m-0 tracking-wide">DOKUMENTASI PEMBERSIHAN</h2>
-                        <h3 id="previewTitle2" class="title-outline text-lg md:text-[1.5rem] font-black uppercase m-0 tracking-wide mt-1 md:mt-2">SEKTOR SLOGDAM XII/TPR</h3>
-                    </div>
-
-                    <!-- Logo Kanan (Opsional/Sembunyi by default) -->
-                    <img id="previewLogo2" src="" alt="Logo Kanan" class="absolute right-2 md:right-6 max-w-[80px] md:max-w-[120px] max-h-[80px] md:max-h-[120px] object-contain drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)] z-20 hidden">
-                </div>
-
-                <!-- Tanggal di Pojok Kanan Bawah Kop -->
-                <div class="w-full flex justify-end px-3 md:px-4 mt-2 mb-1 relative z-30">
-                    <span id="previewDate" class="date-outline text-[11px] md:text-[14px] font-bold tracking-wide uppercase">Sabtu, 7 November 2026</span>
-                </div>
-
-                <!-- Grid Foto Dokumentasi -->
-                <div class="w-full p-3 bg-white pb-6">
-                    <div id="previewGrid" class="grid grid-cols-2 gap-3 bg-white">
-                        <!-- Foto Item akan di-generate secara dinamis -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Modal Notifikasi / Pesan -->
-    <div id="toastMessage" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center space-x-2 text-sm">
-        <i class="fa-solid fa-circle-check text-emerald-400"></i>
-        <span id="toastText">Berhasil mengunduh laporan!</span>
     </div>
 
     <script>
-        // Data default gambar placeholder untuk awal
-        const defaultImages = [
-            "https://placehold.co/600x400/334155/ffffff?text=Foto+Kegiatan+1",
-            "https://placehold.co/600x400/475569/ffffff?text=Foto+Kegiatan+2",
-            "https://placehold.co/600x400/64748b/ffffff?text=Foto+Kegiatan+3",
-            "https://placehold.co/600x400/475569/ffffff?text=Foto+Kegiatan+4",
-            "https://placehold.co/600x400/334155/ffffff?text=Foto+Kegiatan+5",
-            "https://placehold.co/600x400/64748b/ffffff?text=Foto+Kegiatan+6"
-        ];
+        // Real-time Text Update
+        document.getElementById('inputJudul1').addEventListener('input', e => document.getElementById('previewJudul1').innerText = e.target.value);
+        document.getElementById('inputJudul2').addEventListener('input', e => document.getElementById('previewJudul2').innerText = e.target.value);
+        document.getElementById('inputTanggal').addEventListener('input', e => document.getElementById('previewTanggal').innerText = e.target.value);
 
-        let currentImages = [...defaultImages];
+        // Real-time Font Size Adjustments
+        document.getElementById('sizeJudul1').addEventListener('input', e => {
+            document.getElementById('previewJudul1').style.fontSize = e.target.value + 'px';
+            document.getElementById('valSize1').innerText = e.target.value;
+        });
+        document.getElementById('sizeJudul2').addEventListener('input', e => {
+            document.getElementById('previewJudul2').style.fontSize = e.target.value + 'px';
+            document.getElementById('valSize2').innerText = e.target.value;
+        });
+        document.getElementById('sizeTanggal').addEventListener('input', e => {
+            document.getElementById('previewTanggal').style.fontSize = e.target.value + 'px';
+            document.getElementById('valSizeTgl').innerText = e.target.value;
+        });
 
-        // Inisialisasi saat pertama kali dimuat
-        window.onload = function() {
-            renderControls();
-            renderPreviewGrid();
-        };
-
-        // Update teks kop surat secara real-time
-        function updateReport() {
-            document.getElementById('previewTitle1').innerText = document.getElementById('inputTitle1').value || 'DOKUMENTASI KEGIATAN';
-            document.getElementById('previewTitle2').innerText = document.getElementById('inputTitle2').value || 'BAGIAN / SEKTOR TERKAIT';
-            document.getElementById('previewDate').innerText = document.getElementById('inputDate').value || 'Hari, Tanggal Bulan Tahun';
-        }
-
-        // Handle Upload Logo (Kiri dan Kanan)
-        function handleLogoUpload(event, position) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.getElementById(`previewLogo${position}`);
-                    img.src = e.target.result;
-                    img.classList.remove('hidden'); // Munculkan logo jika sebelumnya hidden
+        // Image Upload Handlers
+        function handleImageUpload(inputId, targetId, isBackground = false) {
+            document.getElementById(inputId).addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const targetElement = document.getElementById(targetId);
+                        if (isBackground) {
+                            targetElement.style.backgroundImage = `url(${event.target.result})`;
+                            // Hapus gradien merah putih bawaan jika gambar dimasukkan
+                            targetElement.style.background = `url(${event.target.result})`;
+                            targetElement.style.backgroundSize = 'cover';
+                            targetElement.style.backgroundPosition = 'center';
+                        } else if (targetElement.tagName === 'IMG') {
+                            targetElement.src = event.target.result;
+                            targetElement.style.display = 'block';
+                        } else {
+                            targetElement.style.backgroundImage = `url(${event.target.result})`;
+                            targetElement.innerText = ''; // Hilangkan teks placeholder
+                        }
+                    }
+                    reader.readAsDataURL(file);
                 }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Handle Upload Background Kop
-        function handleBgUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('reportHeader').style.backgroundImage = `url('${e.target.result}')`;
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Ubah jumlah grid foto
-        function changeGridCount() {
-            renderControls();
-            renderPreviewGrid();
-        }
-
-        // Render input kontrol upload foto di panel kiri
-        function renderControls() {
-            const count = parseInt(document.getElementById('selectGridCount').value);
-            const container = document.getElementById('imageUploadControls');
-            container.innerHTML = '';
-
-            for (let i = 0; i < count; i++) {
-                const div = document.createElement('div');
-                div.className = "flex items-center space-x-2 bg-slate-50 p-2 rounded-lg border border-slate-200";
-                div.innerHTML = `
-                    <div class="w-10 h-10 bg-slate-200 rounded overflow-hidden flex-shrink-0 flex items-center justify-center">
-                        <img id="thumb_${i}" src="${currentImages[i] || defaultImages[i]}" class="w-full h-full object-cover">
-                    </div>
-                    <div class="flex-1">
-                        <label class="block text-[11px] font-medium text-slate-600 mb-0.5">Ganti Foto #${i + 1}</label>
-                        <input type="file" accept="image/*" onchange="handlePhotoUpload(event, ${i})" class="w-full text-[10px] text-slate-500 file:py-1 file:px-2 file:rounded file:border-0 file:bg-slate-200 file:font-semibold hover:file:bg-slate-300 cursor-pointer">
-                    </div>
-                `;
-                container.appendChild(div);
-            }
-        }
-
-        // Handle upload foto individual pada grid
-        function handlePhotoUpload(event, index) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    currentImages[index] = e.target.result;
-                    document.getElementById(`thumb_${index}`).src = e.target.result;
-                    renderPreviewGrid();
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Render preview grid foto di lembar laporan
-        function renderPreviewGrid() {
-            const count = parseInt(document.getElementById('selectGridCount').value);
-            const gridContainer = document.getElementById('previewGrid');
-            gridContainer.innerHTML = '';
-
-            // Atur kolom CSS Tailwind berdasarkan jumlah foto
-            if (count === 2) {
-                gridContainer.className = "grid grid-cols-1 md:grid-cols-2 gap-2";
-            } else if (count === 4) {
-                gridContainer.className = "grid grid-cols-2 gap-2";
-            } else if (count === 6) {
-                gridContainer.className = "grid grid-cols-2 gap-2";
-            }
-
-            for (let i = 0; i < count; i++) {
-                const imgSrc = currentImages[i] || defaultImages[i];
-                const card = document.createElement('div');
-                // Desain kotak tajam dan merapat sesuai standar foto pelaporan
-                card.className = "relative bg-slate-200 aspect-[4/3] flex items-center justify-center overflow-hidden";
-                card.innerHTML = `
-                    <img src="${imgSrc}" class="w-full h-full object-cover" alt="Foto ${i+1}">
-                `;
-                gridContainer.appendChild(card);
-            }
-        }
-
-        // Reset Formulir ke default
-        function resetForm() {
-            document.getElementById('inputTitle1').value = "DOKUMENTASI PEMBERSIHAN";
-            document.getElementById('inputTitle2').value = "SEKTOR SLOGDAM XII/TPR";
-            document.getElementById('inputDate').value = "Sabtu, 7 November 2026";
-            document.getElementById('selectGridCount').value = "4";
-            
-            // Reset Logo Kiri
-            document.getElementById('previewLogo1').src = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Lambang_Kodam_XII_Tanjungpura.png/300px-Lambang_Kodam_XII_Tanjungpura.png";
-            if(document.getElementById('inputLogo1')) document.getElementById('inputLogo1').value = '';
-            
-            // Reset Logo Kanan
-            const logo2 = document.getElementById('previewLogo2');
-            logo2.src = "";
-            logo2.classList.add('hidden');
-            if(document.getElementById('inputLogo2')) document.getElementById('inputLogo2').value = '';
-
-            document.getElementById('reportHeader').style.backgroundImage = ''; // Reset custom background
-            if(document.getElementById('inputBg')) document.getElementById('inputBg').value = '';
-            
-            currentImages = [...defaultImages];
-            renderControls();
-            renderPreviewGrid();
-            showToast("Formulir berhasil direset.");
-        }
-
-        // Fungsi Unduh Laporan sebagai Gambar (JPG)
-        function downloadReport() {
-            const reportElement = document.getElementById('reportContainer');
-            
-            showToast("Sedang memproses gambar laporan...");
-
-            html2canvas(reportElement, {
-                scale: 2, // Kualitas tinggi
-                useCORS: true,
-                allowTaint: true
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `Laporan-Dokumentasi-${Date.now()}.jpg`;
-                link.href = canvas.toDataURL('image/jpeg', 0.95);
-                link.click();
-                showToast("Laporan berhasil diunduh!");
-            }).catch(err => {
-                console.error(err);
-                showToast("Gagal mengunduh laporan.");
             });
         }
 
-        // Helper untuk memunculkan pesan toast interaktif (menggantikan alert)
-        function showToast(message) {
-            const toast = document.getElementById('toastMessage');
-            const toastText = document.getElementById('toastText');
-            toastText.innerText = message;
-            
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
+        // Setup Event Listeners for Images
+        handleImageUpload('inputBg', 'headerContainer', true);
+        handleImageUpload('inputLogoKiri', 'logoKiriPreview');
+        handleImageUpload('inputLogoKanan', 'logoKananPreview');
+        handleImageUpload('inputFoto1', 'boxFoto1');
+        handleImageUpload('inputFoto2', 'boxFoto2');
+        handleImageUpload('inputFoto3', 'boxFoto3');
+        handleImageUpload('inputFoto4', 'boxFoto4');
+
+        // Download Function
+        function downloadReport() {
+            const reportArea = document.getElementById('reportArea');
+            html2canvas(reportArea, { scale: 2 }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'Laporan-Dokumentasi.jpg';
+                link.href = canvas.toDataURL('image/jpeg', 0.9);
+                link.click();
+            });
         }
     </script>
 </body>
