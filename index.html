@@ -56,7 +56,7 @@
             font-size: 13px;
             color: #334155;
         }
-        .form-group input[type="text"], .form-group select {
+        .form-group input[type="text"], .form-group textarea, .form-group select {
             width: 100%;
             padding: 8px;
             border: 1px solid #cbd5e1;
@@ -64,6 +64,14 @@
             box-sizing: border-box;
             font-family: inherit;
         }
+        
+        /* Modifikasi Textarea untuk Enter */
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+            text-align: left;
+        }
+
         .form-group input[type="file"] {
             font-size: 12px;
             width: 100%;
@@ -121,12 +129,14 @@
             -webkit-text-stroke: 1.5px black;
             text-shadow: 3px 3px 0 #000, 
                          4px 4px 5px rgba(0,0,0,0.7);
+            /* Menghapus white-space:nowrap agar bisa dienter/bungkus ke bawah */
+            white-space: pre-wrap; 
+            line-height: 1.1; 
         }
         
         #previewJudul1 {
-            white-space: nowrap; 
             font-size: 32px; 
-            margin-bottom: 2px;
+            margin-bottom: 5px;
         }
         #previewJudul2 {
             font-size: 26px; 
@@ -185,8 +195,8 @@
             aspect-ratio: 4/3; 
             background-size: cover;
             background-position: center;
-            outline: 3px solid #fff;
-            outline-offset: -3px; 
+            /* Border dalam untuk tepian foto tetap jelas */
+            border: 4px solid #ffffff; 
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             display: flex;
             justify-content: center;
@@ -250,20 +260,20 @@
         </div>
 
         <div class="form-group">
-            <label>Judul Baris 1</label>
-            <input type="text" id="inputJudul1" value="DOKUMENTASI PEMBERSIHAN">
-            <label style="margin-top: 10px;">Ukuran Font: <span id="valSize1" class="val-display">32</span>px</label>
-            <input type="range" id="sizeJudul1" class="slider" min="16" max="60" value="32">
+            <label>Judul Baris 1 (Gunakan Enter jika kepanjangan)</label>
+            <textarea id="inputJudul1">DOKUMENTASI KEGIATAN PEMBERSIHAN</textarea>
+            <label style="margin-top: 10px;">Ukuran Font: <span id="valSize1" class="val-display">25</span>px</label>
+            <input type="range" id="sizeJudul1" class="slider" min="16" max="60" value="25">
             
             <label style="margin-top: 10px;">Tebal Garis Tepi (Stroke): <span id="valStroke1" class="val-display">1.5</span>px</label>
             <input type="range" id="strokeJudul1" class="slider" min="0" max="4" step="0.1" value="1.5">
         </div>
 
         <div class="form-group">
-            <label>Judul Baris 2</label>
-            <input type="text" id="inputJudul2" value="SEKTOR SLOGDAM XII/TPR">
-            <label style="margin-top: 10px;">Ukuran Font: <span id="valSize2" class="val-display">26</span>px</label>
-            <input type="range" id="sizeJudul2" class="slider" min="14" max="50" value="26">
+            <label>Judul Baris 2 (Gunakan Enter jika kepanjangan)</label>
+            <textarea id="inputJudul2">SEKTOR SLOGDAM XII/TPR</textarea>
+            <label style="margin-top: 10px;">Ukuran Font: <span id="valSize2" class="val-display">22</span>px</label>
+            <input type="range" id="sizeJudul2" class="slider" min="14" max="50" value="22">
         </div>
 
         <div class="form-group">
@@ -298,8 +308,8 @@
                 <option value="1">1 Foto (Penuh)</option>
                 <option value="2">2 Foto (Berdampingan)</option>
                 <option value="3">3 Foto (1 Atas, 2 Bawah)</option>
-                <option value="4" selected>4 Foto (Grid 2x2 - Standar)</option>
-                <option value="6">6 Foto (Grid 2 Kolom x 3 Baris)</option>
+                <option value="4">4 Foto (Grid 2x2 - Standar)</option>
+                <option value="6" selected>6 Foto (Grid 2 Kolom x 3 Baris)</option>
                 <option value="8">8 Foto (Grid 2 Kolom x 4 Baris)</option>
             </select>
         </div>
@@ -316,7 +326,7 @@
                 <img id="logoKiriPreview" class="logo-kiri" style="display: none;">
                 
                 <div class="header-title-container">
-                    <div id="previewJudul1" class="text-military">DOKUMENTASI PEMBERSIHAN</div>
+                    <div id="previewJudul1" class="text-military">DOKUMENTASI KEGIATAN PEMBERSIHAN</div>
                     <div id="previewJudul2" class="text-military">SEKTOR SLOGDAM XII/TPR</div>
                 </div>
 
@@ -364,7 +374,7 @@
         document.getElementById('strokeJudul1').addEventListener('input', e => {
             const strokeVal = e.target.value + 'px black';
             document.getElementById('previewJudul1').style.webkitTextStroke = strokeVal;
-            document.getElementById('previewJudul2').style.webkitTextStroke = strokeVal; // Judul 1 & 2 disamakan strokenya
+            document.getElementById('previewJudul2').style.webkitTextStroke = strokeVal;
             document.getElementById('valStroke1').innerText = e.target.value;
         });
         
