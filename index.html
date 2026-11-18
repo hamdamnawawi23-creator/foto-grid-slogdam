@@ -20,7 +20,7 @@
             gap: 20px;
         }
         .sidebar {
-            width: 380px; 
+            width: 390px; 
             background: white;
             padding: 20px;
             border-radius: 8px;
@@ -46,14 +46,14 @@
         .form-group {
             margin-bottom: 15px;
             background: #f8fafc;
-            padding: 10px;
+            padding: 12px;
             border-radius: 6px;
             border: 1px solid #e2e8f0;
         }
         .form-group label {
             display: block;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-size: 13px;
             color: #334155;
         }
@@ -68,7 +68,7 @@
         
         .form-group textarea {
             resize: vertical;
-            min-height: 60px;
+            min-height: 55px;
             text-align: left;
         }
 
@@ -78,7 +78,8 @@
         }
         .slider {
             width: 100%;
-            margin-top: 5px;
+            margin: 4px 0 8px 0;
+            cursor: pointer;
         }
         .val-display {
             color: #2563eb;
@@ -108,6 +109,7 @@
             justify-content: center;
             align-items: center;
             border-bottom: 3px solid #f8fafc;
+            overflow: hidden;
         }
         
         .header-title-container {
@@ -120,14 +122,13 @@
             width: 70%;
         }
 
-        /* Teks Judul - Menggunakan Shadow 8 Arah (Menghindari Bug Garis di HP) */
+        /* Teks Judul - Shadow 8 Arah Mulus */
         .text-military {
             color: #FFD700;
             font-weight: 900;
             font-family: Arial, sans-serif;
             text-transform: uppercase;
             letter-spacing: 1px;
-            /* Webkit-stroke DIHAPUS, diganti dengan shadow pekat */
             -webkit-text-stroke: 0px; 
             text-shadow: 
                 -2px -2px 0 #000,
@@ -143,11 +144,11 @@
         }
         
         #previewJudul1 {
-            font-size: 32px; 
+            font-size: 25px; 
             margin-bottom: 5px;
         }
         #previewJudul2 {
-            font-size: 26px; 
+            font-size: 22px; 
         }
 
         /* Logo */
@@ -180,7 +181,6 @@
             z-index: 10;
         }
         
-        /* Tanggal (Shadow yang lebih tipis) */
         #previewTanggal {
             font-size: 14px; 
             text-transform: none;
@@ -207,12 +207,11 @@
             box-sizing: border-box; 
         }
         
+        /* Kotak Pembungkus Foto menggunakan Tag IMG Asli agar Akurat saat Diunduh */
         .photo-box {
             background-color: #334155;
             width: 100%;
             aspect-ratio: 4/3; 
-            background-size: cover;
-            background-position: center;
             border: 4px solid #000000; 
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             display: flex;
@@ -222,6 +221,21 @@
             font-weight: bold;
             font-size: 14px;
             box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 50% 50%;
+            display: none;
+        }
+
+        .photo-placeholder {
+            position: absolute;
+            pointer-events: none;
         }
 
         /* Container Upload */
@@ -232,21 +246,36 @@
             margin-top: 10px;
         }
         .dynamic-photo-input {
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #f1f5f9;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
         }
         .dynamic-photo-input:last-child {
-            border-bottom: none;
             margin-bottom: 0;
-            padding-bottom: 0;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 6px;
+        }
+        .control-col {
+            flex: 1;
+        }
+        .sub-label {
+            font-size: 11px !important;
+            color: #475569 !important;
+            margin-bottom: 2px !important;
+            font-weight: 600 !important;
         }
 
         .btn-download {
             background: #16a34a;
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 14px 24px;
             font-size: 16px;
             font-weight: bold;
             border-radius: 6px;
@@ -257,8 +286,9 @@
             max-width: 800px;
         }
         .btn-download:hover { background: #15803d; }
+        .btn-download:disabled { background: #94a3b8; cursor: not-allowed; }
 
-        /* TAMPILAN RESPONSIF UNTUK HP / MOBILE */
+        /* RESPONSIF HP */
         @media (max-width: 850px) {
             body {
                 flex-direction: column; 
@@ -269,7 +299,7 @@
                 height: auto; 
                 max-height: none;
                 overflow-y: visible;
-                margin-bottom: 20px;
+                margin-bottom: 10px;
             }
             .main-content {
                 width: 100%;
@@ -278,7 +308,7 @@
                 align-items: flex-start; 
             }
             .main-content::before {
-                content: "Geser ke kanan untuk melihat pratinjau penuh ➡️";
+                content: "Geser ke kanan untuk memeriksa pratinjau penuh ➡️";
                 display: block;
                 color: #64748b;
                 font-size: 12px;
@@ -298,7 +328,7 @@
         <h3 style="font-size: 14px; color: #64748b; margin-top: 20px;">1. PENGATURAN TEKS KOP</h3>
         
         <div class="form-group">
-            <label>Pilih Jenis Font (Untuk Semua Teks)</label>
+            <label>Pilih Jenis Font</label>
             <select id="fontFamilySelector">
                 <option value="Arial, sans-serif" selected>Arial (Standar Militer)</option>
                 <option value="'Impact', sans-serif">Impact (Tebal & Padat)</option>
@@ -310,47 +340,41 @@
 
         <div class="form-group">
             <label>Judul Baris 1 (Gunakan Enter jika kepanjangan)</label>
-            <textarea id="inputJudul1">DOKUMENTASI KEGIATAN PEMBERSIHAN</textarea>
-            <label style="margin-top: 10px;">Ukuran Font: <span id="valSize1" class="val-display">25</span>px</label>
+            <textarea id="inputJudul1">DOKUMENTASI
+KEGIATAN PEMBERSIHAN SEKTOR</textarea>
+            <label style="margin-top: 8px;">Ukuran Font: <span id="valSize1" class="val-display">25</span>px</label>
             <input type="range" id="sizeJudul1" class="slider" min="16" max="60" value="25">
         </div>
 
         <div class="form-group">
             <label>Judul Baris 2 (Gunakan Enter jika kepanjangan)</label>
-            <textarea id="inputJudul2">SEKTOR SLOGDAM XII/TPR</textarea>
-            <label style="margin-top: 10px;">Ukuran Font: <span id="valSize2" class="val-display">22</span>px</label>
+            <textarea id="inputJudul2">SLOGDAM XII/TPR</textarea>
+            <label style="margin-top: 8px;">Ukuran Font: <span id="valSize2" class="val-display">22</span>px</label>
             <input type="range" id="sizeJudul2" class="slider" min="14" max="50" value="22">
         </div>
 
         <div class="form-group">
             <label>Keterangan Tanggal & Hari</label>
-            <input type="text" id="inputTanggal" value="Sabtu, 7 November 2026">
-            <label style="margin-top: 10px;">Ukuran Font: <span id="valSizeTgl" class="val-display">14</span>px</label>
+            <input type="text" id="inputTanggal" value="Rabu, 18 November 2026">
+            <label style="margin-top: 8px;">Ukuran Font: <span id="valSizeTgl" class="val-display">14</span>px</label>
             <input type="range" id="sizeTanggal" class="slider" min="10" max="30" value="14">
-        </div>
-        
-        <div style="font-size: 11px; color: #64748b; margin-top: -5px; margin-bottom: 15px;">
-            *Garis tepi (stroke) hitam sekarang distandarkan permanen untuk mencegah bug tampilan di HP.
         </div>
 
         <h3 style="font-size: 14px; color: #64748b; margin-top: 25px;">2. BACKGROUND & LOGO</h3>
         <div class="form-group">
             <label>Background Kop (Opsional)</label>
             <input type="file" id="inputBg" accept="image/*">
-            <small style="color: gray; display:block; margin-top:4px;">(Upload Satin Merah Putih di sini)</small>
         </div>
-        
         <div class="form-group">
             <label>Logo Instansi Kiri</label>
             <input type="file" id="inputLogoKiri" accept="image/*">
         </div>
-        
         <div class="form-group">
             <label>Logo Instansi Kanan (Opsional)</label>
             <input type="file" id="inputLogoKanan" accept="image/*">
         </div>
 
-        <h3 style="font-size: 14px; color: #64748b; margin-top: 25px;">3. LAYOUT & JUMLAH FOTO</h3>
+        <h3 style="font-size: 14px; color: #64748b; margin-top: 25px;">3. LAYOUT & PENGATURAN FOTO</h3>
         <div class="form-group">
             <label>Pilih Jumlah Foto / Grid</label>
             <select id="gridSelector" onchange="generateGrid()">
@@ -363,35 +387,38 @@
             </select>
         </div>
 
-        <div id="dynamicUploadContainer">
-        </div>
+        <div id="dynamicUploadContainer"></div>
     </div>
 
     <div class="main-content">
-        <button class="btn-download" onclick="downloadReport()">📥 Unduh Laporan (JPG Resolusi Tinggi)</button>
+        <button class="btn-download" id="btnDownload" onclick="downloadReport()">📥 Unduh Laporan (JPG Resolusi Tinggi)</button>
         
         <div class="report-paper" id="reportArea">
             <div class="header" id="headerContainer">
                 <img id="logoKiriPreview" class="logo-kiri" style="display: none;">
                 
                 <div class="header-title-container">
-                    <div id="previewJudul1" class="text-military">DOKUMENTASI KEGIATAN PEMBERSIHAN</div>
-                    <div id="previewJudul2" class="text-military">SEKTOR SLOGDAM XII/TPR</div>
+                    <div id="previewJudul1" class="text-military">DOKUMENTASI
+KEGIATAN PEMBERSIHAN SEKTOR</div>
+                    <div id="previewJudul2" class="text-military">SLOGDAM XII/TPR</div>
                 </div>
 
                 <img id="logoKananPreview" class="logo-kanan" style="display: none;">
                 
                 <div class="date-container">
-                    <div id="previewTanggal" class="text-military">Sabtu, 7 November 2026</div>
+                    <div id="previewTanggal" class="text-military">Rabu, 18 November 2026</div>
                 </div>
             </div>
 
-            <div class="grid-container" id="gridContainerPreview">
-            </div>
+            <div class="grid-container" id="gridContainerPreview"></div>
         </div>
     </div>
 
     <script>
+        // Simpan memori foto agar tidak hilang saat ganti jumlah grid
+        const photoState = {};
+
+        // Update Teks Real-Time
         document.getElementById('inputJudul1').addEventListener('input', e => document.getElementById('previewJudul1').innerText = e.target.value);
         document.getElementById('inputJudul2').addEventListener('input', e => document.getElementById('previewJudul2').innerText = e.target.value);
         document.getElementById('inputTanggal').addEventListener('input', e => document.getElementById('previewTanggal').innerText = e.target.value);
@@ -451,67 +478,151 @@
 
             if (count === 1) {
                 gridPreview.style.gridTemplateColumns = '1fr';
-            } else if (count === 2 || count === 4 || count === 6 || count === 8) {
-                gridPreview.style.gridTemplateColumns = '1fr 1fr'; 
-            } else if (count === 3) {
+            } else {
                 gridPreview.style.gridTemplateColumns = '1fr 1fr'; 
             }
 
             for (let i = 1; i <= count; i++) {
+                // Inisialisasi memori jika belum ada
+                if (!photoState[i]) {
+                    photoState[i] = { src: '', posX: 50, posY: 50, mode: 'cover' };
+                }
+
+                const state = photoState[i];
+
+                // Buat Panel Kontrol di Sidebar
                 const uploadDiv = document.createElement('div');
-                uploadDiv.className = 'dynamic-photo-input form-group';
-                uploadDiv.style.background = 'transparent';
-                uploadDiv.style.border = 'none';
-                uploadDiv.style.padding = '0';
-                
-                const label = document.createElement('label');
-                label.innerText = `Ganti Foto #${i}`;
-                
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'image/*';
-                input.id = `inputFoto${i}`;
-                
-                uploadDiv.appendChild(label);
-                uploadDiv.appendChild(input);
+                uploadDiv.className = 'dynamic-photo-input';
+                uploadDiv.innerHTML = `
+                    <label style="color:#0f172a; font-size:14px;">📸 Foto Kegiatan #${i}</label>
+                    <input type="file" accept="image/*" id="inputFoto${i}" style="margin-bottom:8px;">
+                    
+                    <div class="control-row">
+                        <div class="control-col">
+                            <label class="sub-label">Geser Atas/Bawah: <span id="valPosY${i}" class="val-display">${state.posY}</span>%</label>
+                            <input type="range" class="slider" min="0" max="100" value="${state.posY}" id="posY${i}">
+                        </div>
+                        <div class="control-col">
+                            <label class="sub-label">Geser Kiri/Kanan: <span id="valPosX${i}" class="val-display">${state.posX}</span>%</label>
+                            <input type="range" class="slider" min="0" max="100" value="${state.posX}" id="posX${i}">
+                        </div>
+                    </div>
+
+                    <select id="modeFoto${i}" style="font-size:12px; padding:6px; margin-top:2px;">
+                        <option value="cover" ${state.mode === 'cover' ? 'selected' : ''}>Mode: Potong Penuh Kotak (Cover)</option>
+                        <option value="contain" ${state.mode === 'contain' ? 'selected' : ''}>Mode: Tampilkan Utuh Tanpa Potong (Contain)</option>
+                    </select>
+                `;
                 uploadContainer.appendChild(uploadDiv);
 
+                // Buat Kotak Foto di Kertas Laporan (Menggunakan Tag <img> Asli)
                 const photoBox = document.createElement('div');
                 photoBox.className = 'photo-box';
                 photoBox.id = `boxFoto${i}`;
-                photoBox.innerText = `Foto Kegiatan ${i}`;
                 
                 if (count === 3 && i === 1) {
                     photoBox.style.gridColumn = '1 / span 2'; 
                     photoBox.style.aspectRatio = '21/9'; 
                 }
 
+                const placeholder = document.createElement('span');
+                placeholder.className = 'photo-placeholder';
+                placeholder.id = `placeholder${i}`;
+                placeholder.innerText = `Foto Kegiatan ${i}`;
+
+                const imgElement = document.createElement('img');
+                imgElement.id = `imgFoto${i}`;
+
+                photoBox.appendChild(placeholder);
+                photoBox.appendChild(imgElement);
                 gridPreview.appendChild(photoBox);
 
-                input.addEventListener('change', function(e) {
+                // Pulihkan foto jika sebelumnya sudah pernah diupload
+                if (state.src) {
+                    applyPhotoToBox(i);
+                }
+
+                // Event Listener Upload Foto
+                document.getElementById(`inputFoto${i}`).addEventListener('change', function(e) {
                     const file = e.target.files[0];
                     if (file) {
                         const reader = new FileReader();
                         reader.onload = function(event) {
-                            const targetBox = document.getElementById(`boxFoto${i}`);
-                            targetBox.style.backgroundImage = `url(${event.target.result})`;
-                            targetBox.innerText = ''; 
+                            photoState[i].src = event.target.result;
+                            applyPhotoToBox(i);
                         }
                         reader.readAsDataURL(file);
                     }
                 });
+
+                // Event Listener Geser Vertikal (Atas/Bawah)
+                document.getElementById(`posY${i}`).addEventListener('input', function(e) {
+                    photoState[i].posY = e.target.value;
+                    document.getElementById(`valPosY${i}`).innerText = e.target.value;
+                    applyPhotoToBox(i);
+                });
+
+                // Event Listener Geser Horizontal (Kiri/Kanan)
+                document.getElementById(`posX${i}`).addEventListener('input', function(e) {
+                    photoState[i].posX = e.target.value;
+                    document.getElementById(`valPosX${i}`).innerText = e.target.value;
+                    applyPhotoToBox(i);
+                });
+
+                // Event Listener Mode Cover/Contain
+                document.getElementById(`modeFoto${i}`).addEventListener('change', function(e) {
+                    photoState[i].mode = e.target.value;
+                    applyPhotoToBox(i);
+                });
             }
         }
 
+        function applyPhotoToBox(index) {
+            const state = photoState[index];
+            const img = document.getElementById(`imgFoto${index}`);
+            const placeholder = document.getElementById(`placeholder${index}`);
+            const box = document.getElementById(`boxFoto${index}`);
+
+            if (state.src) {
+                img.src = state.src;
+                img.style.display = 'block';
+                img.style.objectFit = state.mode;
+                img.style.objectPosition = `${state.posX}% ${state.posY}%`;
+                placeholder.style.display = 'none';
+                box.style.backgroundColor = state.mode === 'contain' ? '#0f172a' : '#334155';
+            }
+        }
+
+        // Jalankan saat pertama kali dibuka
         generateGrid();
 
+        // Fungsi Unduh Anti-Terpotong di HP
         function downloadReport() {
+            const btn = document.getElementById('btnDownload');
+            const originalText = btn.innerText;
+            btn.innerText = '⏳ Sedang Memproses Gambar...';
+            btn.disabled = true;
+
             const reportArea = document.getElementById('reportArea');
-            html2canvas(reportArea, { scale: 2 }).then(canvas => {
+            
+            html2canvas(reportArea, { 
+                scale: 2,
+                useCORS: true,
+                scrollX: 0,
+                scrollY: 0,
+                windowWidth: 1200 // Memaksa render ukuran desktop agar tidak gepeng di HP
+            }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = 'Dokumentasi-Slogdam-Grid.jpg';
-                link.href = canvas.toDataURL('image/jpeg', 0.9);
+                link.href = canvas.toDataURL('image/jpeg', 0.92);
                 link.click();
+                
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }).catch(err => {
+                alert('Gagal mengunduh gambar. Silakan coba lagi.');
+                btn.innerText = originalText;
+                btn.disabled = false;
             });
         }
     </script>
